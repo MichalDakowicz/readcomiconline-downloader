@@ -3,7 +3,7 @@ const cheerio = require('cheerio');
 const fs = require('fs');
 
 const url = process.argv[2];
-const path = process.argv[3]
+const path = "downloads";
 
 var a = b;
 
@@ -109,7 +109,7 @@ async function parseContent(html) {
 
     for (let i in result) {
         console.log('Downloading page ' + (i - -1) + '...')
-        await download(result[i], path + (i - -1) + '.jpg')
+        await download(result[i], path + '/' + (i - -1) + '.jpg')
     }
 
     console.log('\x1b[32mYour comic is ready! Enjoy your read!')
