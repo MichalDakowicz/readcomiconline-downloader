@@ -1,9 +1,12 @@
 const axios = require('axios');
 const cheerio = require('cheerio');
+const pdfkit = require('pdfkit');
 const fs = require('fs');
 
 const url = process.argv[2];
 const path = "downloads";
+
+const doc = new pdfkit;
 
 var a = b;
 
@@ -65,23 +68,12 @@ async function fetchData() {
     }
 }
 
-async function download(url, output) {
-    try {
-        const response = await axios ({
-            method: 'get',
-            url: url,
-            responseType: 'stream',
+async function fetchImage(src) {
+    const image = await axios
+        .get(src, {
+            responseType: 'arraybuffer'
         })
-
-        response.data.pipe(fs.createWriteStream(output))
-
-        await new Promise((resolve, reject) => {
-            response.data.on('end', () => resolve());
-            response.data.on('error', (err) => reject(err));
-        });
-    } catch (error) {
-        console.error('Error downloading file:', error.message);
-    }
+    return image.data;
 }
 
 async function parseContent(html) {
@@ -107,10 +99,21 @@ async function parseContent(html) {
 
     console.log('\x1b[32mSUCCESS\x1b[0m')
 
+    doc.pipe(fs.createWriteStream('comic.pdf'));
+
     for (let i in result) {
-        console.log('Downloading page ' + (i - -1) + '...')
-        await download(result[i], path + '/' + (i - -1) + '.jpg')
+        console.log('Downloading page ' + (i - -1) + '...');
+        const image = await fetchImage(result[i]);
+        if (i > 0) {
+            doc.addPage()
+        }
+        doc.image(image, 0, 0, {
+            width: doc.page.width,
+            height: doc.page.height,
+        });
     }
+
+    doc.end();
 
     console.log('\x1b[32mYour comic is ready! Enjoy your read!')
 }

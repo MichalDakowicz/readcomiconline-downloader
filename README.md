@@ -3,11 +3,7 @@
  A simple from link readcomiconline downloader
 
 ### HOW TO USE
-Run to begin download
-```
+Run the JS script through node with the link to the comic as an argument:
+```shell
 node /main.js link_to_comic
-```
-wait for the process to finish, if you want the comic in a .pdf file instead of images run the python file
-```
-python3 /main.py
 ```
