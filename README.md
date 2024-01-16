@@ -2,6 +2,12 @@
 
  A simple from link readcomiconline downloader
 
+### SETUP
+download Pillow using
+```
+pip install pillow
+```
+
 ### HOW TO USE
 Run to begin download
 ```
